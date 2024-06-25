@@ -7,6 +7,7 @@ import {
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Profile from "./pages/profile/Profile";
+import Register from "./pages/register/Register";
 import { AuthContext } from "./state/AuthContext";
 import { useContext } from "react";
 
@@ -18,6 +19,10 @@ function App() {
       <Routes>
         <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
+        <Route
+          path="/register"
+          element={user ? <Navigate to="/" /> : <Register />}
+        />
         <Route
           path="/profile/:userId"
           element={user ? <Profile /> : <Navigate to="/login" />}
