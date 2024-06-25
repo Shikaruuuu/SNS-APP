@@ -93,7 +93,20 @@ router.get("/profile/:username", async (req, res) => {
   }
 });
 
-//タイムラインの投稿を取得する
+// 全てのユーザーの投稿を取得
+router.get("/timeline/all", async (req, res) => {
+  try {
+    const result = await Post.findAll({
+      order: [["createdAt", "DESC"]],
+    });
+    res.status(200).json(result);
+  } catch (err) {
+    console.error("Error fetching all posts:", err);
+    res.status(500).json({ message: "Failed to fetch posts", error: err });
+  }
+});
+
+// 特定のユーザーのタイムラインの投稿を取得する
 router.get("/timeline/:userId", async (req, res) => {
   try {
     const currentUser = await User.findByPk(req.params.userId);

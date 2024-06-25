@@ -11,7 +11,7 @@ export default function Home() {
       <Topbar />
       <div className="homeContainer">
       <Sidebar />
-      <Timeline />
+      <Timeline isProfile={false}/>
       <Rightbar />
       </div>
     </>
