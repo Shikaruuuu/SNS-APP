@@ -10,6 +10,7 @@ import Profile from "./pages/profile/Profile";
 import Register from "./pages/register/Register";
 import { AuthContext } from "./state/AuthContext";
 import { useContext } from "react";
+import React from "react";
 
 function App() {
   const { user } = useContext(AuthContext);

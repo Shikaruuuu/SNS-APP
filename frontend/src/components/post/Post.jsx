@@ -44,10 +44,10 @@ export default function Post({ post }) {
       <div className="postWrapper">
         <div className="postTop">
           <div className="postTopLeft">
-            <Link to={`/profile/${user.username}`}>
+            <Link to={`/profile/${user.id}`}>
               <img src={user.profilePicture ? PUBLIC_FOLDER + user.profilePicture : PUBLIC_FOLDER + "/person/noAvatar.png"} alt="" className="postProfileImg" />
             </Link>
-            <span className="postUserName">{user.username}</span>
+            <span className="postUserName">{user.id}</span>
             <span className="postDate">{format(post.createdAt)} </span>
           </div>
           <div className="postTopRight">
