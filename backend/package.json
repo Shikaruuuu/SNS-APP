@@ -4,7 +4,8 @@
   "description": "snsApp",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "test": "echo 'Error: no test specified' && exit 0"
   },
   "author": "yokomori_h",
   "license": "ISC",
