@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import "./Register.css";
-import { Form, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 

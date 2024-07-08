@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState } from 'react';
-import { Analytics, Face, Gif, Image } from '@mui/icons-material';
+import { Image } from '@mui/icons-material';
 import "./Share.css";
 import { AuthContext } from '../../state/AuthContext';
 import axios from 'axios';
