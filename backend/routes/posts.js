@@ -1,6 +1,6 @@
-const router = require("express").Router();
-const Post = require("../models/Post");
-const User = require("../models/User");
+const express = require("express");
+const router = express.Router();
+const { Post, User } = require("../models");
 
 //投稿を作成する
 router.post("/", async (req, res) => {
@@ -96,42 +96,40 @@ router.get("/profile/:username", async (req, res) => {
 // 全てのユーザーの投稿を取得
 router.get("/timeline/all", async (req, res) => {
   try {
-    const result = await Post.findAll({
+    const posts = await Post.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ["username", "profilePicture"], // 必要なユーザー情報を指定
+        },
+      ],
       order: [["createdAt", "DESC"]],
     });
-    res.status(200).json(result);
+    res.status(200).json(posts);
   } catch (err) {
     console.error("Error fetching all posts:", err);
     res.status(500).json({ message: "Failed to fetch posts", error: err });
   }
 });
 
-// 特定のユーザーのタイムラインの投稿を取得する
+// 特定のユーザーの投稿を取得
 router.get("/timeline/:userId", async (req, res) => {
   try {
-    const currentUser = await User.findByPk(req.params.userId);
-    if (!currentUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    console.log("Current user:", currentUser);
-
-    const userPosts = await Post.findAll({
-      where: { userId: currentUser.id.toString() },
+    const userId = req.params.userId;
+    const posts = await Post.findAll({
+      where: { userId },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "username", "profilePicture"],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
     });
-    console.log("User posts:", userPosts);
-
-    const friendPosts = await Promise.all(
-      currentUser.followings.map((friendId) => {
-        return Post.findAll({ where: { userId: friendId.toString() } });
-      })
-    );
-    console.log("Friend posts:", friendPosts);
-
-    res.status(200).json(userPosts.concat(...friendPosts));
+    res.status(200).json(posts);
   } catch (err) {
-    console.error("Error fetching timeline posts:", err);
-    res.status(500).json({ message: "Internal server error" });
+    console.error(`Error fetching posts for user ${userId}:`, err);
+    res.status(500).json(err);
   }
 });
 

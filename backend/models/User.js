@@ -1,57 +1,69 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../sequelize"); // sequelizeインスタンスのパスを適宜修正してください
 
-const User = sequelize.define(
-  "User",
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
+module.exports = (sequelize) => {
+  const User = sequelize.define(
+    "User",
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true,
+        unique: true,
+      },
+      username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      profilePicture: {
+        type: DataTypes.STRING,
+        defaultValue: "",
+      },
+      coverPicture: {
+        type: DataTypes.STRING,
+        defaultValue: "",
+      },
+      isAdmin: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      desc: {
+        type: DataTypes.STRING,
+      },
+      city: {
+        type: DataTypes.STRING,
+      },
     },
-    username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    profilePicture: {
-      type: DataTypes.STRING,
-      defaultValue: "",
-    },
-    coverPicture: {
-      type: DataTypes.STRING,
-      defaultValue: "",
-    },
-    followers: {
-      type: DataTypes.ARRAY(DataTypes.STRING), // 例として
-      defaultValue: [],
-    },
-    followings: {
-      type: DataTypes.ARRAY(DataTypes.STRING), // 例として
-      defaultValue: [],
-    },
-    isAdmin: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
-    desc: {
-      type: DataTypes.STRING,
-    },
-    city: {
-      type: DataTypes.STRING,
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
+    {
+      timestamps: true,
+    }
+  );
 
-module.exports = User;
+  User.associate = function (models) {
+    User.hasMany(models.Post, { foreignKey: "userId" });
+  };
+
+  // // リレーションシップの定義
+  // User.belongsToMany(User, {
+  //   through: Follow,
+  //   as: "followers",
+  //   foreignKey: "followingId",
+  // });
+
+  // User.belongsToMany(User, {
+  //   through: Follow,
+  //   as: "followings",
+  //   foreignKey: "followerId",
+  // });
+
+  return User;
+};

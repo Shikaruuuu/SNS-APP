@@ -1,5 +1,6 @@
 const router = require("express").Router();
-const User = require("../models/User"); // モデルをインポート
+const { User } = require("../models"); // modelsからUserをインポート
+const { Follow } = require("../models");
 
 // ユーザー情報の更新
 router.put("/:id", async (req, res) => {
@@ -39,7 +40,7 @@ router.get("/", async (req, res) => {
   const username = req.query.username;
   try {
     const user = userId
-      ? await User.findByPk(userId)
+      ? await User.findOne({ where: { id: userId } })
       : await User.findOne({ where: { username: username } });
 
     if (!user) {
@@ -60,11 +61,17 @@ router.put("/:id/follow", async (req, res) => {
     try {
       const user = await User.findByPk(req.params.id);
       const currentUser = await User.findByPk(req.body.userId);
-      if (!user.followers.includes(req.body.userId)) {
-        user.followers.push(req.body.userId);
-        currentUser.followings.push(req.params.id);
-        await user.save();
-        await currentUser.save();
+      const follow = await Follow.findOne({
+        where: {
+          followerId: req.body.userId,
+          followingId: req.params.id,
+        },
+      });
+      if (!follow) {
+        await Follow.create({
+          followerId: req.body.userId,
+          followingId: req.params.id,
+        });
         return res.status(200).json("フォローに成功しました");
       } else {
         return res
@@ -83,15 +90,14 @@ router.put("/:id/follow", async (req, res) => {
 router.put("/:id/unfollow", async (req, res) => {
   if (req.body.userId !== req.params.id) {
     try {
-      const user = await User.findByPk(req.params.id);
-      const currentUser = await User.findByPk(req.body.userId);
-      if (user.followers.includes(req.body.userId)) {
-        user.followers = user.followers.filter((id) => id !== req.body.userId);
-        currentUser.followings = currentUser.followings.filter(
-          (id) => id !== req.params.id
-        );
-        await user.save();
-        await currentUser.save();
+      const follow = await Follow.findOne({
+        where: {
+          followerId: req.body.userId,
+          followingId: req.params.id,
+        },
+      });
+      if (follow) {
+        await follow.destroy();
         return res.status(200).json("フォロー解除しました");
       } else {
         return res.status(403).json("このユーザーはフォロー解除できません");
@@ -101,6 +107,21 @@ router.put("/:id/unfollow", async (req, res) => {
     }
   } else {
     return res.status(500).json("自分自身をフォロー解除できません");
+  }
+});
+
+// フォロー状態の確認
+router.get("/:id/isFollowed", async (req, res) => {
+  try {
+    const follow = await Follow.findOne({
+      where: {
+        followerId: req.query.userId,
+        followingId: req.params.id,
+      },
+    });
+    res.status(200).json({ isFollowed: !!follow });
+  } catch (err) {
+    res.status(500).json(err);
   }
 });
 

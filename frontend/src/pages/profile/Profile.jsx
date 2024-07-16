@@ -13,21 +13,33 @@ export default function Profile() {
   const [user, setUser] = useState({});
   const { userId } = useParams();
   const { user: currentUser } = useContext(AuthContext);
+  const [isFollowed, setIsFollowed] = useState(false);
 
   useEffect(() => {
-    if (userId) {
-      const fetchUser = async () => {
-        try {
-          const response = await axios.get(`/api/users/${userId}`);
-          console.log(response);
-          setUser(response.data);
-        } catch (err) {
-          console.error("Error fetching user:", err);
-        }
-      };
-      fetchUser();
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`/users?userId=${userId}`);
+        setUser(response.data);
+        setIsFollowed(currentUser.followings.includes(userId));
+      } catch (err) {
+        console.error("Error fetching user:", err);
+      }
+    };
+    fetchUser();
+  }, [userId, currentUser]);
+
+  const handleFollow = async () => {
+    try {
+      if (isFollowed) {
+        await axios.put(`/users/${userId}/unfollow`, { userId: currentUser.id });
+      } else {
+        await axios.put(`/users/${userId}/follow`, { userId: currentUser.id });
+      }
+      setIsFollowed(!isFollowed);
+    } catch (err) {
+      console.error("Error following/unfollowing user:", err);
     }
-  }, [userId, currentUser]); // currentUser が変更されたときも再度実行
+  };
 
   return (
     <>
@@ -49,12 +61,17 @@ export default function Profile() {
               )}
             </div>
             <div className="profileInfo">
-              <h4 className="ProfileInfoName">{user.username}</h4>
+              <h4 className="profileInfoName">{user.username}</h4>
               <span className="profileInfoDesc">{user.desc}</span>
+              {userId !== String(currentUser.id) && (
+                <button className="followButton" onClick={handleFollow}>
+                  {isFollowed ? 'Unfollow' : 'Follow'}
+                </button>
+              )}
             </div>
           </div>
           <div className="profileRightBottom">
-            <Timeline isProfile={true}/>
+            <Timeline isProfile={true} profileUserId={userId} />
             <Rightbar user={user} />
           </div>
         </div>
