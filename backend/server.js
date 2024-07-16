@@ -11,6 +11,11 @@ const { Pool } = require("pg");
 const path = require("path");
 const cors = require("cors");
 
+const corsOptions = {
+  origin: "http://13.55.20.66:3000", // フロントエンドのURL
+  optionsSuccessStatus: 200,
+};
+
 // データベース接続のテスト
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -30,6 +35,7 @@ if (process.env.NODE_ENV !== "production") {
 
 // CORSミドルウェアを使用
 app.use(cors());
+app.use(cors(corsOptions));
 
 // ミドルウェア
 app.use("/images", express.static(path.join(__dirname, "public/images")));
