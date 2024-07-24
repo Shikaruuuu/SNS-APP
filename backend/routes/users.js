@@ -1,12 +1,11 @@
 const router = require("express").Router();
-const { User } = require("../models"); // modelsからUserをインポート
-const { Follow } = require("../models");
+const { User, Follow } = require("../models"); // modelsからUserとFollowをインポート
 
 // ユーザー情報の更新
 router.put("/:id", async (req, res) => {
   if (req.body.userId === req.params.id || req.body.isAdmin) {
     try {
-      const user = await User.update(req.body, {
+      await User.update(req.body, {
         where: { id: req.params.id },
       });
       return res.status(200).json("ユーザー情報が更新できました");
@@ -61,6 +60,15 @@ router.put("/:id/follow", async (req, res) => {
     try {
       const user = await User.findByPk(req.params.id);
       const currentUser = await User.findByPk(req.body.userId);
+      if (!user) {
+        console.log("User not found");
+        return res.status(404).json("ユーザーが見つかりません");
+      }
+      if (!currentUser) {
+        console.log("Current user not found");
+        return res.status(404).json("現在のユーザーが見つかりません");
+      }
+
       const follow = await Follow.findOne({
         where: {
           followerId: req.body.userId,
@@ -79,6 +87,7 @@ router.put("/:id/follow", async (req, res) => {
           .json("あなたはすでにこのユーザーをフォローしています");
       }
     } catch (err) {
+      console.error("フォローエラー:", err);
       return res.status(500).json(err);
     }
   } else {
@@ -86,7 +95,7 @@ router.put("/:id/follow", async (req, res) => {
   }
 });
 
-// ユーザーのフォローを外す
+// ユーザーのフォロー解除
 router.put("/:id/unfollow", async (req, res) => {
   if (req.body.userId !== req.params.id) {
     try {
@@ -103,6 +112,7 @@ router.put("/:id/unfollow", async (req, res) => {
         return res.status(403).json("このユーザーはフォロー解除できません");
       }
     } catch (err) {
+      console.error("フォロー解除エラー:", err);
       return res.status(500).json(err);
     }
   } else {
@@ -120,6 +130,33 @@ router.get("/:id/isFollowed", async (req, res) => {
       },
     });
     res.status(200).json({ isFollowed: !!follow });
+  } catch (err) {
+    console.error("フォロー状態確認エラー:", err);
+    res.status(500).json(err);
+  }
+});
+
+// フォローしているユーザーの一覧を取得
+router.get("/:id/followings", async (req, res) => {
+  try {
+    const followings = await Follow.findAll({
+      where: { followerId: req.params.id },
+      include: [{ model: User, as: "following" }],
+    });
+    res.status(200).json(followings);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// フォロワーの一覧を取得
+router.get("/:id/followers", async (req, res) => {
+  try {
+    const followers = await Follow.findAll({
+      where: { followingId: req.params.id },
+      include: [{ model: User, as: "follower" }],
+    });
+    res.status(200).json(followers);
   } catch (err) {
     res.status(500).json(err);
   }

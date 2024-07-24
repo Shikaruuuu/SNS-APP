@@ -11,9 +11,11 @@ const { Pool } = require("pg");
 const path = require("path");
 const cors = require("cors");
 
+// CORS設定
 const corsOptions = {
-  origin: "http://13.55.20.66:3000", // フロントエンドのURL
-  optionsSuccessStatus: 200,
+  origin: "*", // すべてのオリジンを許可
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 // データベース接続のテスト
@@ -34,7 +36,6 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // CORSミドルウェアを使用
-app.use(cors());
 app.use(cors(corsOptions));
 
 // ミドルウェア

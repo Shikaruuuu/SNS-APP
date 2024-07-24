@@ -11,6 +11,7 @@ import Register from "./pages/register/Register";
 import { AuthContext } from "./state/AuthContext";
 import { useContext } from "react";
 import React from "react";
+import FollowList from "./components/FollowList/FollowList";
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -27,6 +28,14 @@ function App() {
         <Route
           path="/profile/:userId"
           element={user ? <Profile /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/profile/:userId/followings"
+          element={<FollowList type="followings" />}
+        />
+        <Route
+          path="/profile/:userId/followers"
+          element={<FollowList type="followers" />}
         />
       </Routes>
     </Router>
