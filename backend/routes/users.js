@@ -136,16 +136,18 @@ router.get("/:id/isFollowed", async (req, res) => {
   }
 });
 
-// フォローしているユーザーの一覧を取得
+// フォローしているユーザー一覧を取得
 router.get("/:id/followings", async (req, res) => {
   try {
     const followings = await Follow.findAll({
       where: { followerId: req.params.id },
-      include: [{ model: User, as: "following" }],
+      include: [{ model: User, as: "followingUser" }],
     });
-    res.status(200).json(followings);
+    const followingUsers = followings.map((follow) => follow.followingUser);
+    res.status(200).json(followingUsers);
   } catch (err) {
-    res.status(500).json(err);
+    console.error("Error fetching followings:", err);
+    res.status(500).json({ message: "サーバーエラー" });
   }
 });
 
