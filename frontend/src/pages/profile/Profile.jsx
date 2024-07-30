@@ -11,21 +11,25 @@ import { AuthContext } from '../../state/AuthContext';
 export default function Profile() {
   const PUBLIC_FOLDER = process.env.REACT_APP_PUBLIC_FOLDER;
   const [user, setUser] = useState({});
-  const { userId } = useParams();
-  const { user: currentUser } = useContext(AuthContext);
+  const { userId } = useParams();  // 現在のプロフィールページのユーザーID
+  const { user: currentUser } = useContext(AuthContext);  // ログインしているユーザー
   const [isFollowed, setIsFollowed] = useState(false);
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchUserAndFollowStatus = async () => {
       try {
-        const response = await axios.get(`/users?userId=${userId}`);
-        setUser(response.data);
-        setIsFollowed(currentUser.followings.includes(userId));
+        const userResponse = await axios.get(`/users?userId=${userId}`);
+        setUser(userResponse.data);
+
+        const followResponse = await axios.get(`/users/${userId}/isFollowed`, {
+          params: { userId: currentUser.id },
+        });
+        setIsFollowed(followResponse.data.isFollowed);
       } catch (err) {
-        console.error("Error fetching user:", err);
+        console.error("Error fetching user or follow status:", err);
       }
     };
-    fetchUser();
+    fetchUserAndFollowStatus();
   }, [userId, currentUser]);
 
   const handleFollow = async () => {
@@ -61,7 +65,7 @@ export default function Profile() {
               )}
             </div>
             <div className="profileInfo">
-              <h4 className="profileInfoName">{user.username}</h4>
+              <h4 className="ProfileInfoName">{user.username}</h4>
               <span className="profileInfoDesc">{user.desc}</span>
               {userId !== String(currentUser.id) && (
                 <button className="followButton" onClick={handleFollow}>
