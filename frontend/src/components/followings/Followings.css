@@ -1,5 +1,5 @@
 .followings {
-    flex: 5;
+    flex: 6;
   }
   
   .followingsWrapper {
@@ -21,18 +21,16 @@
     display: flex;
     align-items: center;
     margin-bottom: 15px;
-  }
-  
-  .followingUser {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
     padding: 4px 6px;
     width: 50%;
     cursor: pointer;
     box-shadow: 3px 7px 13px -10px #65789f;
     border-radius: 10px;
-    background-color: #f48e96;
+  }
+  
+  .followingUser {
+    display: flex;
+    align-items: center;
   }
   
   .followingUserImg {

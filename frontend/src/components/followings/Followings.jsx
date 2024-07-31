@@ -30,7 +30,7 @@ export default function Followings() {
     return (
         <div className='followings'>
             <div className='followingsWrapper'>
-                <h4>フォロー中のユーザー</h4>
+                <h4>フォロー中</h4>
                 <ul>
                   {followingUsers.map(user => (
                     <li key={user.id}>
