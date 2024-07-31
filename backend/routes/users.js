@@ -156,11 +156,13 @@ router.get("/:id/followers", async (req, res) => {
   try {
     const followers = await Follow.findAll({
       where: { followingId: req.params.id },
-      include: [{ model: User, as: "follower" }],
+      include: [{ model: User, as: "followerUser" }],
     });
-    res.status(200).json(followers);
+    const followerUsers = followers.map((follow) => follow.followerUser);
+    res.status(200).json(followerUsers);
   } catch (err) {
-    res.status(500).json(err);
+    console.error("Error fetching followers:", err);
+    res.status(500).json({ message: "サーバーエラー" });
   }
 });
 

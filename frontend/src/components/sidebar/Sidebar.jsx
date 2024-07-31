@@ -25,7 +25,7 @@ export default function Sidebar() {
           </li>
           <li className="sidebarListItem">
             <Person  className="sidebarIcon"/>
-            <Link to={`/profile/${user.id}/followers`} className="sidebarListItemText" style={{ textDecoration: "none", color: "black" }}>
+            <Link to={`followerList/${user.id}/followers`} className="sidebarListItemText" style={{ textDecoration: "none", color: "black" }}>
             <span className="sidebarListItemText">フォロワー</span>
             </Link>
           </li>

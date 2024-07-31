@@ -9,6 +9,7 @@ import Login from "./pages/login/Login";
 import Profile from "./pages/profile/Profile";
 import Register from "./pages/register/Register";
 import FollowingList from "./pages/followingList/FollowingList";
+import FollowerList from "./pages/followerList/FollowerList";
 import { AuthContext } from "./state/AuthContext";
 import { useContext } from "react";
 import React from "react";
@@ -32,6 +33,10 @@ function App() {
         <Route
           path="/followingList/:userId/followings"
           element={user ? <FollowingList /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/followerList/:userId/followers"
+          element={user ? <FollowerList /> : <Navigate to="/login" />}
         />
       </Routes>
     </Router>
