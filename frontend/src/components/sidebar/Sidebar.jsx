@@ -19,13 +19,13 @@ export default function Sidebar() {
           </li>
           <li className="sidebarListItem">
             <Person  className="sidebarIcon"/>
-            <Link to={`followingList/${user.id}/followings`} className="sidebarListItemText" style={{ textDecoration: "none", color: "black" }}>
+            <Link to={`/followingList/${user.id}/followings`} className="sidebarListItemText" style={{ textDecoration: "none", color: "black" }}>
             <span className="sidebarListItemText">フォロー中</span>
             </Link>
           </li>
           <li className="sidebarListItem">
             <Person  className="sidebarIcon"/>
-            <Link to={`followerList/${user.id}/followers`} className="sidebarListItemText" style={{ textDecoration: "none", color: "black" }}>
+            <Link to={`/followerList/${user.id}/followers`} className="sidebarListItemText" style={{ textDecoration: "none", color: "black" }}>
             <span className="sidebarListItemText">フォロワー</span>
             </Link>
           </li>
