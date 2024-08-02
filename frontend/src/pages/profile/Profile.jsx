@@ -69,7 +69,7 @@ export default function Profile() {
               <span className="profileInfoDesc">{user.desc}</span>
               {userId !== String(currentUser.id) && (
                 <button className="followButton" onClick={handleFollow}>
-                  {isFollowed ? 'Unfollow' : 'Follow'}
+                  {isFollowed ? 'フォロー解除' : 'フォロー'}
                 </button>
               )}
             </div>

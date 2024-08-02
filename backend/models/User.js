@@ -39,9 +39,6 @@ module.exports = (sequelize) => {
       desc: {
         type: DataTypes.STRING,
       },
-      city: {
-        type: DataTypes.STRING,
-      },
     },
     {
       timestamps: true,
@@ -51,19 +48,6 @@ module.exports = (sequelize) => {
   User.associate = function (models) {
     User.hasMany(models.Post, { foreignKey: "userId" });
   };
-
-  // // リレーションシップの定義
-  // User.belongsToMany(User, {
-  //   through: Follow,
-  //   as: "followers",
-  //   foreignKey: "followingId",
-  // });
-
-  // User.belongsToMany(User, {
-  //   through: Follow,
-  //   as: "followings",
-  //   foreignKey: "followerId",
-  // });
 
   return User;
 };

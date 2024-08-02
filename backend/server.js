@@ -38,6 +38,10 @@ if (process.env.NODE_ENV !== "production") {
 // CORSミドルウェアを使用
 app.use(cors(corsOptions));
 
+// リクエストサイズ制限を拡大
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
+
 // ミドルウェア
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 app.use(express.json());

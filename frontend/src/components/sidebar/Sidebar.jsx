@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { Home, Person } from "@mui/icons-material";
+import SettingsIcon from '@mui/icons-material/Settings';
 import "./Sidebar.css";
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../state/AuthContext';
@@ -33,6 +34,12 @@ export default function Sidebar() {
             <Person  className="sidebarIcon"/>
             <Link to={user ? `/profile/${user.id}` : "/login"} className="sidebarLink" style={{ textDecoration: "none", color: "black" }}>
             <span className="sidebarListItemText">プロフィール</span>
+            </Link>
+          </li>
+          <li className="sidebarListItem">
+            <SettingsIcon  className="sidebarIcon"/>
+            <Link to={user ? `/settings/${user.id}` : "/login"} className="sidebarLink" style={{ textDecoration: "none", color: "black" }}>
+            <span className="sidebarListItemText">設定</span>
             </Link>
           </li>
         </ul>

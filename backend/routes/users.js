@@ -3,12 +3,25 @@ const { User, Follow } = require("../models"); // modelsからUserとFollowを�
 
 // ユーザー情報の更新
 router.put("/:id", async (req, res) => {
-  if (req.body.userId === req.params.id || req.body.isAdmin) {
+  if (String(req.body.userId) === String(req.params.id) || req.body.isAdmin) {
     try {
-      await User.update(req.body, {
+      const updatedUser = {};
+      if (req.body.username) updatedUser.username = req.body.username;
+      if (req.body.email) updatedUser.email = req.body.email;
+      if (req.body.password) updatedUser.password = req.body.password;
+      if (req.body.profilePicture)
+        updatedUser.profilePicture = req.body.profilePicture;
+      if (req.body.coverPicture)
+        updatedUser.coverPicture = req.body.coverPicture;
+      if (req.body.desc) updatedUser.desc = req.body.desc;
+
+      await User.update(updatedUser, {
         where: { id: req.params.id },
       });
-      return res.status(200).json("ユーザー情報が更新できました");
+
+      const user = await User.findByPk(req.params.id);
+
+      return res.status(200).json(user);
     } catch (err) {
       return res.status(500).json(err);
     }
