@@ -25,8 +25,8 @@ export default function Settings() {
       username,
       email,
       // password,
-      profilePicture,
-      coverPicture,
+      profilePicture: user.profilePicture,
+      coverPicture: user.coverPicture,
       desc,
     };
     // if (password === "") {
@@ -121,12 +121,10 @@ export default function Settings() {
           <div className="settingsFormGroup">
             <label>プロフィール画像</label>
             <input type='file' id='file' accept='.png, .jpeg, .jpg ' onChange={(e) => setProfileImg(e.target.files[0])}/>
-            {profilePicture && <img src={profilePicture} alt="Profile" className="settingsProfileImg" />}
           </div>
           <div className="settingsFormGroup">
             <label>カバー画像</label>
             <input type='file' id='file' accept='.png, .jpeg, .jpg ' onChange={(e) => setCoverImg(e.target.files[0])}/>
-            {coverPicture && <img src={coverPicture} alt="Cover" className="settingsCoverImg" />}
           </div>
           <div className="settingsFormGroup">
             <label>自己紹介</label>
