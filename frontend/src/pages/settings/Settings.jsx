@@ -12,8 +12,6 @@ export default function Settings() {
   const [username, setUsername] = useState(user.username);
   const [email, setEmail] = useState(user.email);
   // const [password, setPassword] = useState("");
-  const [profilePicture, setProfilePicture] = useState(user.profilePicture);
-  const [coverPicture, setCoverPicture] = useState(user.coverPicture);
   const [desc, setDesc] = useState(user.desc);
   const [success, setSuccess] = useState(false);
   const [fadeOut, setFadeOut] = useState(false);
