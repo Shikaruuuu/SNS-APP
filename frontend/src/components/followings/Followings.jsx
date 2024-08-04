@@ -25,7 +25,7 @@ export default function Followings() {
         };
       };
       fetchFollowings();
-    },[userId]);
+    },[userId, currentUser.id]);
 
     return (
         <div className='followings'>

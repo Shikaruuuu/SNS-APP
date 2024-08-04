@@ -26,7 +26,7 @@ export default function Followers() {
         };
       };
       fetchFollowers();
-    },[userId]);
+    },[userId, currentUser.id]);
 
     return (
         <div className='followers'>
