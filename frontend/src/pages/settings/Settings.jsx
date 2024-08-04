@@ -11,7 +11,7 @@ export default function Settings() {
   const { user, dispatch } = useContext(AuthContext);
   const [username, setUsername] = useState(user.username);
   const [email, setEmail] = useState(user.email);
-  const [password, setPassword] = useState("");
+  // const [password, setPassword] = useState("");
   const [profilePicture, setProfilePicture] = useState(user.profilePicture);
   const [coverPicture, setCoverPicture] = useState(user.coverPicture);
   const [desc, setDesc] = useState(user.desc);
@@ -26,14 +26,14 @@ export default function Settings() {
       userId: user.id,
       username,
       email,
-      password,
+      // password,
       profilePicture,
       coverPicture,
       desc,
     };
-    if (password === "") {
-      delete updatedUser.password; // パスワードが空の場合は更新しない
-    }
+    // if (password === "") {
+    //   delete updatedUser.password; // パスワードが空の場合は更新しない
+    // }
 
     if(profileImg) {
       const data = new FormData();
@@ -69,28 +69,6 @@ export default function Settings() {
     } catch (err) {
       console.error(err);
       dispatch({ type: "UPDATE_FAILURE" });
-    }
-  };
-
-  const handleProfilePictureChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfilePicture(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleCoverPictureChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setCoverPicture(reader.result);
-      };
-      reader.readAsDataURL(file);
     }
   };
 
@@ -133,7 +111,7 @@ export default function Settings() {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div className="settingsFormGroup">
+          {/* <div className="settingsFormGroup"> 入力されたパスワードをハッシュ化する必要あり
             <label>パスワード</label>
             <input
               type="password"
@@ -141,7 +119,7 @@ export default function Settings() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-          </div>
+          </div> */}
           <div className="settingsFormGroup">
             <label>プロフィール画像</label>
             <input type='file' id='file' accept='.png, .jpeg, .jpg ' onChange={(e) => setProfileImg(e.target.files[0])}/>
